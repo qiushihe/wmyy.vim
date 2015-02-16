@@ -22,6 +22,14 @@ nnoremap <leader>wn :WmyyNewWindow<CR>
 
 See [Window Management Functions](#window-management-functions) below for all available functions.
 
+Also for you should probably also set this:
+
+```
+set winminheight=0
+```
+
+... to allow a window to be completely collapsed to save more space.
+
 ### Window Management Functions
 
 **:WmyyNewWindow**: Create a new window in the current stack. The newly created window will be
