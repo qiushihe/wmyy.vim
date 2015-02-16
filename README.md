@@ -66,14 +66,13 @@ will be maximized.
 
 **:WmyySwapDown**: Swap the buffer of the current window with the bugger of the window below it.
 
-**:WmyySwapLeft**: Swap the bufer of the current window with the bugger of the window to the left.
+**:WmyySwapLeft**: Swap the buffer of the current window with the bugger of the window to the left.
 
-**:WmyySwapRight**: Swap the buffer of the current window with te buffer of the window to the
+**:WmyySwapRight**: Swap the buffer of the current window with the buffer of the window to the
 right.
 
 ### Known Issues
 
 Currently there is an issue with Vim that prevents `:WmyyMoveRight` from working.
 
-*TODO: Invesigate further and provide more detail about the issue.*
-
+*TODO: Investigate further and provide more detail about the issue.*
