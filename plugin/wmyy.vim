@@ -49,8 +49,15 @@ function! s:Move(Dir)
       exe 'wincmd ' . a:Dir
       exe 'wincmd s'
 
-      " Load buffer into new window and enalrge it
+      " Load buffer into new window
       exe 'hide buf' l:OldBufNum
+
+      " Move the new window to the top of the stack
+      while s:HasSiblings('k')
+        call s:Swap('k')
+      endwhile
+
+      " Finally enlarge the new window
       exe 'resize 9999'
     else
       if s:HasSiblings()
