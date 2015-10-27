@@ -7,9 +7,7 @@ function! s:Move(Dir)
     if s:HasNeighbour(a:Dir)
       " Vim's "window number" is not a unique identifier for an instance of window. Instead the
       " window number is simply an index, and the number of a given window can change at run time
-      " if there are windows being created before it (i.e. above or to the left). For that reason,
-      " we must manipulate and close existing windows before creating new windows to avoid
-      " causing the window number to become unexpected.
+      " if there are windows being created before it (i.e. above or to the left).
 
       " Grab the number of the old window and buffer
       let l:OldWinNum = winnr()
@@ -17,27 +15,35 @@ function! s:Move(Dir)
 
       " Figure out sibling window number
       let l:SiblingWinNum = 0
+      let l:SiblingWinDir = ''
       if s:HasSiblings('k')
         exe 'wincmd k'
         let l:SiblingWinNum = winnr()
+        let l:SiblingWinDir = 'k'
         exe l:OldWinNum . 'wincmd w'
       else
         if s:HasSiblings('j')
           exe 'wincmd j'
           let l:SiblingWinNum = winnr()
+          let l:SiblingWinDir = 'j'
           exe l:OldWinNum . 'wincmd w'
         endif
-      endif
-
-      " Enlarge sibling of old window if necessary
-      if l:SiblingWinNum > 0
-        exe l:SiblingWinNum . 'wincmd w'
-        exe 'resize 9999'
       endif
 
       " Focus and close old window
       exe l:OldWinNum . 'wincmd w'
       exe 'wincmd c'
+
+      " Enlarge sibling of old window if necessary
+      if l:SiblingWinNum > 0
+        " If the sibling is below the window we just closed, the sibling's window number would be
+        " decremented by 1. So we need to adjust l:SiblingWinNum accordingly.
+        if l:SiblingWinDir == 'j'
+          let l:SiblingWinNum = l:SiblingWinNum - 1
+        endif
+        exe l:SiblingWinNum . 'wincmd w'
+        exe 'resize 9999'
+      endif
 
       " Switch to neighbour stack and create a new window
       exe 'wincmd ' . a:Dir
