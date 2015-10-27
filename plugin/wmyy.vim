@@ -139,8 +139,36 @@ endfunction
 
 function! s:Focus(Dir)
   if a:Dir == 'k' || a:Dir == 'j' || a:Dir == 'h' || a:Dir == 'l'
-    exe 'wincmd ' . a:Dir
-    exe 'resize 9999'
+    " When shifting focus left or right, we want to focus the tallest window in the destination
+    " stack instead of always focusing the first window in the destination stack
+    if a:Dir == 'h' || a:Dir == 'l'
+      " Shift focus to the stack in the direction specified
+      exe 'wincmd ' . a:Dir
+
+      " Shift focus to the window on top of the stack without enlarging it
+      while s:HasSiblings('k')
+        exe 'wincmd k'
+      endwhile
+
+      " Loop through all the window in the stack to find the tallest one
+      let l:TallestWinNum = winnr()
+      let l:TallestWinHeight = winheight(winnr())
+      while s:HasSiblings('j')
+        exe 'wincmd j'
+        let l:CurrentWinHeight = winheight(winnr())
+        if l:CurrentWinHeight > l:TallestWinHeight
+          let l:TallestWinHeight = l:CurrentWinHeight
+          let l:TallestWinNum = winnr()
+        endif
+      endwhile
+
+      " Focus the tallest window
+      exe l:TallestWinNum . 'wincmd w'
+      exe 'resize 9999'
+    else
+      exe 'wincmd ' . a:Dir
+      exe 'resize 9999'
+    endif
   else
     return
   endif
