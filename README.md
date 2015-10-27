@@ -47,8 +47,7 @@ stack to its left and then maximized.
 
 **:WmyyMoveRight**: Move the current window to the right. If there is no stack to the left of the
 current window, a new stack will be created; otherwise the current window will be moved to the
-stack to its right and then maximized. *Note: this doesn't always work. See
-[Known Issues](#known-issues) below for more info.*
+stack to its right and then maximized.
 
 **:WmyyFocusUp**: Focus the window above the current window. The newly focused window will be
 maximized.
@@ -70,9 +69,3 @@ will be maximized.
 
 **:WmyySwapRight**: Swap the buffer of the current window with the buffer of the window to the
 right.
-
-### Known Issues
-
-Currently there is an issue with Vim that prevents `:WmyyMoveRight` from working.
-
-*TODO: Investigate further and provide more detail about the issue.*

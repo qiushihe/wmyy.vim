@@ -5,20 +5,17 @@ function! s:Move(Dir)
 
   if a:Dir == 'h' || a:Dir == 'l'
     if s:HasNeighbour(a:Dir)
+      " Vim's "window number" is not a unique identifier for an instance of window. Instead the
+      " window number is simply an index, and the number of a given window can change at run time
+      " if there are windows being created before it (i.e. above or to the left). For that reason,
+      " we must manipulate and close existing windows before creating new windows to avoid
+      " causing the window number to become unexpected.
+
+      " Grab the number of the old window and buffer
       let l:OldWinNum = winnr()
       let l:OldBufNum = bufnr('%')
 
-      " Switch to neighbour stack and create a new window
-      exe 'wincmd ' . a:Dir
-      exe 'wincmd s'
-
-      " Load buffer into new window
-      let l:NewWinNum = winnr()
-      exe 'hide buf' l:OldBufNum
-
-      " Go back to old window
-      exe l:OldWinNum . 'wincmd w'
-
+      " Figure out sibling window number
       let l:SiblingWinNum = 0
       if s:HasSiblings('k')
         exe 'wincmd k'
@@ -32,18 +29,22 @@ function! s:Move(Dir)
         endif
       endif
 
-      " Focus and close old window
-      exe l:OldWinNum . 'wincmd w'
-      exe 'wincmd c'
-
       " Enlarge sibling of old window if necessary
       if l:SiblingWinNum > 0
         exe l:SiblingWinNum . 'wincmd w'
         exe 'resize 9999'
       endif
 
-      " Finally focus and enarlge the new window
-      exe l:NewWinNum . 'wincmd w'
+      " Focus and close old window
+      exe l:OldWinNum . 'wincmd w'
+      exe 'wincmd c'
+
+      " Switch to neighbour stack and create a new window
+      exe 'wincmd ' . a:Dir
+      exe 'wincmd s'
+
+      " Load buffer into new window and enalrge it
+      exe 'hide buf' l:OldBufNum
       exe 'resize 9999'
     else
       if s:HasSiblings()
@@ -149,4 +150,3 @@ command! WmyyFocusRight call s:Focus('l')
 
 command! WmyyNewWindow call s:NewWindow()
 command! WmyyCloseWindow call s:CloseWindow()
-
