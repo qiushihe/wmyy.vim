@@ -1,3 +1,6 @@
+let s:True = 1
+let s:False = 0
+
 function! s:Move(Dir)
   if a:Dir != 'h' && a:Dir != 'l' && a:Dir != 'k' && a:Dir != 'j'
     return
@@ -54,7 +57,7 @@ function! s:Move(Dir)
 
       " Move the new window to the top of the stack
       while s:HasSiblings('k')
-        call s:Swap('k')
+        call s:Swap('k', s:False)
       endwhile
 
       " Finally enlarge the new window
@@ -80,8 +83,7 @@ function! s:Move(Dir)
   endif
 
   if a:Dir == 'k' || a:Dir == 'j'
-    call s:Swap(a:Dir)
-    exe 'resize 9999'
+    call s:Swap(a:Dir, s:True)
   endif
 endfunction
 
@@ -110,11 +112,16 @@ function! s:HasAdjacent(Dir)
   endif
 endfunction
 
-function! s:Swap(Dir)
+function! s:Swap(Dir, Expand)
   let l:FromWinNum = winnr()
   let l:FromBufNum = bufnr('%')
 
-  exe 'wincmd ' . a:Dir
+  if a:Expand
+    call s:Focus(a:Dir)
+  else
+    exe 'wincmd ' . a:Dir
+  endif
+
   let l:ToWinNum = winnr()
   let l:ToBufNum = bufnr('%')
 
@@ -179,10 +186,10 @@ command! WmyyMoveDown call s:Move('j')
 command! WmyyMoveLeft call s:Move('h')
 command! WmyyMoveRight call s:Move('l')
 
-command! WmyySwapUp call s:Swap('k')
-command! WmyySwapDown call s:Swap('j')
-command! WmyySwapLeft call s:Swap('h')
-command! WmyySwapRight call s:Swap('l')
+command! WmyySwapUp call s:Swap('k', s:True)
+command! WmyySwapDown call s:Swap('j', s:True)
+command! WmyySwapLeft call s:Swap('h', s:True)
+command! WmyySwapRight call s:Swap('l', s:True)
 
 command! WmyyFocusUp call s:Focus('k')
 command! WmyyFocusDown call s:Focus('j')
@@ -191,3 +198,8 @@ command! WmyyFocusRight call s:Focus('l')
 
 command! WmyyNewWindow call s:NewWindow()
 command! WmyyCloseWindow call s:CloseWindow()
+
+command! WmyySwapUpNoExpand call s:Swap('k', s:False)
+command! WmyySwapDownNoExpand call s:Swap('j', s:False)
+command! WmyySwapLeftNoExpand call s:Swap('h', s:False)
+command! WmyySwapRightNoExpand call s:Swap('l', s:False)

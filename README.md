@@ -61,11 +61,26 @@ will be maximized.
 **:WmyyFocusRight**: Focus the window to the right of the current window. The newly focused window
 will be maximized.
 
-**:WmyySwapUp**: Swap the buffer of the current window with the buffer of the window above it.
+**:WmyySwapUp**: Swap the buffer of the current window with the buffer of the window above it. The
+window above will be maximixed.
 
 **:WmyySwapDown**: Swap the buffer of the current window with the bugger of the window below it.
+The window below will be maximixed.
 
-**:WmyySwapLeft**: Swap the buffer of the current window with the bugger of the window to the left.
+**:WmyySwapLeft**: Swap the buffer of the current window with the bugger of the window to the
+left. The window to the left will be maximixed.
 
 **:WmyySwapRight**: Swap the buffer of the current window with the buffer of the window to the
-right.
+right. The window to the right will be maximixed.
+
+**:WmyySwapUpNoExpand**: Swap the buffer of the current window with the buffer of the window above
+it.
+
+**:WmyySwapDownNoExpand**: Swap the buffer of the current window with the bugger of the window
+below it.
+
+**:WmyySwapLeftNoExpand**: Swap the buffer of the current window with the bugger of the window to
+the left.
+
+**:WmyySwapRightNoExpand**: Swap the buffer of the current window with the buffer of the window to
+the right.
